@@ -1,0 +1,19 @@
+version: "3"
+services:
+  gpu-container:
+    image: gpu-image
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    volumes:
+      - /mnt/docker_home:/home
+    ports:
+      - "2222:22"
+    command: >
+      /usr/sbin/sshd -D&&
+      tail -f /dev/null
