@@ -16,4 +16,3 @@ RUN usermod -aG sudo docker_user
 # Permit root login
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 EXPOSE 22
-
