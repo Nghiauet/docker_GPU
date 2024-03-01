@@ -17,3 +17,23 @@ services:
     command: >
       /usr/sbin/sshd -D&&
       tail -f /dev/null
+  docker-gpu-container_2:
+    image: gpu-image
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+        limits:
+          cpus:   "8"
+          memory: "30G"
+    volumes:
+      - /mnt/docker_home_2:/home
+    ports:
+      - "2223:22"
+    command: >
+      /usr/sbin/sshd -D&&
+      tail -f /dev/null
