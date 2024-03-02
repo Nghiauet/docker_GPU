@@ -1,6 +1,6 @@
 version: "3"
 services:
-  docker-gpu-container:
+  base-gpu-container: # Base service with shared elements
     image: gpu-image
     runtime: nvidia
     environment:
@@ -10,6 +10,15 @@ services:
         reservations:
           devices:
             - capabilities: [gpu]
+
+  container-1:
+    extends:
+      service: base-gpu-container
+    deploy:
+      resources:
+        limits:
+          cpus:   "8"  # May be able to reduce
+          memory: "40G" # May be able to reduce
     volumes:
       - /mnt/docker_home:/home
     ports:
@@ -17,18 +26,15 @@ services:
     command: >
       /usr/sbin/sshd -D&&
       tail -f /dev/null
-  docker-gpu-container_2:
-    image: gpu-image
-    runtime: nvidia
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
+    restart: always
+
+  container-2:
+    extends:
+      service: base-gpu-container
     deploy:
       resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
         limits:
-          cpus:   "8"
+          cpus:   "6"  # Example if workload is lighter
           memory: "30G"
     volumes:
       - /mnt/docker_home_2:/home
@@ -37,3 +43,4 @@ services:
     command: >
       /usr/sbin/sshd -D&&
       tail -f /dev/null
+    restart: always

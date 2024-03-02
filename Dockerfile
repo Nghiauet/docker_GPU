@@ -1,15 +1,17 @@
 # Base Image: Use the specified NVIDIA CUDA image
 FROM nvidia/cuda:12.3.1-base-ubuntu22.04
 
-RUN apt-get update && apt-get install -y openssh-server 
-# install net-tools netstat btop
-RUN apt-get -y install sudo
-RUN apt-get install -y net-tools
-RUN apt-get install -y btop
-RUN apt-get install -y nvtop
-RUN apt-get install -y curl
-# remove cache
-RUN apt-get clean
+# install package
+RUN apt-get update && apt-get install -y \
+       openssh-server \
+       sudo \
+       net-tools \
+       btop \
+       nvtop \
+       curl && \
+       apt-get clean
+
+# add user to ssh
 RUN mkdir /var/run/sshd
 # Set the root password to 123
 RUN useradd -m -s /bin/bash docker_user
